@@ -1,61 +1,98 @@
 const db = require("../models");
 const UserProfile = db.userProfiles;
+const bcrypt = require('bcrypt');
+const passport = require('passport');
+
 
 // Create and Save a new User
 exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.userName) {
-    res.status(400).send({ message: "Content can not be empty!" });
-    return;
+  console.log(req.body);
+  const { name, email, password, password2 } = req.body;
+  let errors = [];
+  console.log(' Name: ' + name + ' email :' + email + ' pass:' + password);
+  if (!name || !email || !password || !password2) {
+    errors.push({ msg: "Please fill in all fields" })
+  }
+  //check if match
+  if (password !== password2) {
+    errors.push({ msg: "passwords dont match" });
   }
 
-  // Create a User
-  const userProfile = new UserProfile({
-    userName: req.body.userName,
-    account: req.body.account,
-    password: req.body.password
-  });
+  //check if password is more than 6 characters
+  if (password.length < 6) {
+    errors.push({ msg: 'password at least 6 characters' })
+  }
 
-  // Save Tutorial in the database
-  userProfile
-    .save(userProfile)
-    .then(data => {
-      res.send(data);
+  if (errors.length > 0) {
+    res.render('register', {
+      errors: errors,
+      name: name,
+      email: email,
+      password: password,
+      password2: password2
     })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the User."
-      });
+  } else {
+    UserProfile.findOne({ email: email }).exec((err, user) => {
+      console.log(user);
+      if (user) {
+        errors.push({ msg: 'email already registered' });
+        res.render('register',{errors,name,email,password,password2})
+      } else {
+        const newUser = new UserProfile({
+          userName: name,
+          email: email,
+          password: password
+        });
+
+        //hash password
+        bcrypt.genSalt(10, (err, salt) =>
+          bcrypt.hash(newUser.password, salt,
+            (err, hash) => {
+              if (err) throw err;
+              //save pass to hash
+              newUser.password = hash;
+              //save user
+              newUser.save()
+                .then((value) => {
+                  console.log(value)
+                  req.flash('success_msg', 'You have now registered!');
+                  res.redirect('/users/login');
+                })
+                .catch(value => console.log(value));
+
+            }));
+      }
     });
+
+  }
 };
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  
+
 };
 
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
-  
+
 };
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
-  
+
 };
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = (req, res) => {
-  
+
 };
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
-  
+
 };
 
 // Find all published Tutorials
 exports.findAllPublished = (req, res) => {
-  
+
 };

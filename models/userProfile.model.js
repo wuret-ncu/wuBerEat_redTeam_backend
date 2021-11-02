@@ -1,14 +1,27 @@
 module.exports = mongoose => {
-    const UserProfile = mongoose.model(
-      "userProfile",
-      mongoose.Schema(
-        {
-          userName: String,
-          account: String,
-          password: String
+  const UserProfile = mongoose.model(
+    "userProfile",
+    mongoose.Schema(
+      {
+        userName: {
+          type: String,
+          required: true
         },
-        { timestamps: true }
-      )
-    );
-    return UserProfile;
-  };
+        email: {
+          type: String,
+          required: true
+        },
+        password: {
+          type: String,
+          required: true
+        },
+        date: {
+          type: Date,
+          default: Date.now
+        }
+      },
+      { timestamps: true }
+    )
+  );
+  return UserProfile;
+};

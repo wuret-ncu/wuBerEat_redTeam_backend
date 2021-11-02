@@ -1,11 +1,25 @@
+const {ensureAuthenticated} = require('../config/auth') 
+
 module.exports = app => {
     const userProfiles = require("../controllers/controller.js");
   
     var router = require("express").Router();
-  
-    // Create a new Tutorial
-    router.post("/", userProfiles.create);
-  
+
+    //register page
+    router.get('/register', (req,res)=>{
+      res.render('register');
+    })
+    
+    //dashboard page
+    router.get('/dashboard', ensureAuthenticated, (req,res)=>{
+      res.render('dashboard',{
+          user: req.user
+      });
+    })
+
+    router.get('/', (req,res)=>{
+      res.render('welcome');
+    })
     // Retrieve all Tutorials
     //router.get("/", tutorials.findAll);
   
@@ -24,5 +38,5 @@ module.exports = app => {
     // Create a new Tutorial
     //router.delete("/", tutorials.deleteAll);
   
-    app.use('/api', router);
+    app.use('/', router);
   };

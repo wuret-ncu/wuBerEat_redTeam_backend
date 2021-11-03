@@ -1,5 +1,4 @@
 const {ensureAuthenticated} = require('../config/auth') 
-
 module.exports = app => {
     const userProfiles = require("../controllers/controller.js");
   
@@ -12,11 +11,12 @@ module.exports = app => {
     
     //dashboard page
     router.get('/dashboard', ensureAuthenticated, (req,res)=>{
+      console.log("req.user: ", req.user);
       res.render('dashboard',{
           user: req.user
       });
     })
-
+ 
     router.get('/', (req,res)=>{
       res.render('welcome');
     })

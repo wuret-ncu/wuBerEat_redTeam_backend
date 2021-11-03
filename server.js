@@ -61,13 +61,15 @@ app.use(expressEjsLayout);
 
 
 //routers
-require("./routes/firstPage.js")(app);
+require("./routes/Page.js")(app);
 require("./routes/users.js")(app);
+require("./routes/uploadMenu.js")(app);
+
 
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 80;
+app.listen(PORT, "0.0.0.0",() => {
   console.log(`Server is running on port ${PORT}.`);
 });
 

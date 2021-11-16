@@ -9,6 +9,7 @@ module.exports = function (passport) {
             UserProfile.findOne({ email: email })
                 .then((user) => {
                     if (!user) {
+                        //console.log("done寫了什麼：", done(null, false, { message: 'that email is not registered' }));
                         return done(null, false, { message: 'that email is not registered' });
                     }
                     //match pass

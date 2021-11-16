@@ -1,3 +1,48 @@
 <h1>Dashboard</h1>
-<p> Welcome <%= user.userName %></p>
+<p> Welcome <%= user.userName %>
+</p>
+<%- include ('./partials/messages') %>
+<form action="/dashboard/avatar" method="POST" enctype="multipart/form-data">
+    <div>
+        <label for="userId">userId</label>
+        <input type="name" name="userId" placeholder="Enter userId" value="<%= typeof userId != 'undefined' ? userId : '' %>" />
+
+    </div>
+    <div>
+        <label for="restaurantName">RestaurantName</label>
+        <input type="name" name="restaurantName" placeholder="Enter restaurant" value="<%= typeof restaurantName != 'undefined' ? restaurantName : '' %>" />
+
+    </div>
+    <div>
+        <label for="restaurantPhone">RestaurantPhone</label>
+        <input type="number" name="restaurantPhone" placeholder="Enter Phone"
+            value="<%= typeof restaurantPhone != 'undefined' ? restaurantPhone : '' %>" />
+    </div>
+    <div>
+        <label for="restaurantLocation">RestaurantLocation</label>
+        <input type="text" name="restaurantLocation" placeholder="Enter restaurantLocation"
+            value="<%= typeof restaurantLocation != 'undefined' ? restaurantLocation : '' %>" />
+    </div>
+    <div>
+        <label for="serviceHour">serviceHour</label>
+        <input type="text" name="serviceHour" placeholder="Enter service hour"
+            value="<%= typeof serviceHour != 'undefined' ? serviceHour : '' %>" />
+    </div>
+    <div>
+        <label for="typeOfRestaurant">type</label>
+        <input type="text" name="typeOfRestaurant" placeholder="Enter typeOfRestaurant"
+            value="<%= typeof typeOfRestaurant != 'undefined' ? typeOfRestaurant : '' %>" />
+    </div>
+    <div>
+        <input type="file"  name="avatar"/>
+    </div>
+    <div>
+        <label for="dish">dish</label>
+        <input type="text" name="dish" placeholder="Enter dish"
+            value="<%= typeof dish != 'undefined' ? dish : '' %>" />
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">
+        送出
+    </button>
+</form>
 <a href="/users/logout">Logout</a>

@@ -67,9 +67,8 @@ exports.create = (req, res) => {
   }
 };
 
-// Retrieve all Tutorials from the database.
-exports.findAll = (req, res) => {
-
+exports.createMenu = (req, res) => {
+  
 };
 
 // Find a single Tutorial with an id

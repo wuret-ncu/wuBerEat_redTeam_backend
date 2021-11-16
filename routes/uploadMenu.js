@@ -49,8 +49,21 @@ module.exports = app => {
             .catch(value => console.log(value));
     })
 
-    router.get('/restaurant/:restaurantId', (req, res) => {
-        
+    router.get('/restaurant/:restaurantId', async (req, res) => {
+        try {
+            // 透過 id 到資料庫尋找相對應的用戶
+            const restaurant = await Restaurant.findById(req.params.restaurantId)
+            // 若無該用戶，或用戶無大頭貼，則丟出錯誤
+            if (!restaurant || !restaurant.avatar) {
+              throw new Error()
+            }
+            // 設定回傳 Header 的資料類型為 png 格式的圖片
+            res.set('Content-Type', 'image/png')
+            // 回傳大頭貼
+            res.send(restaurant.avatar)
+          } catch (error) {
+            res.status(404).send()
+          }
     })
 
     app.use('/dashboard', router);

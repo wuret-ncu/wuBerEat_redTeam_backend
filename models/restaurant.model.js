@@ -30,7 +30,7 @@ module.exports = mongoose => {
             type: Array,
             required: true
           },
-          avatar: {
+          menu: {
             type: Buffer,
             required: true
           },

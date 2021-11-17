@@ -7,7 +7,7 @@ const passport = require('passport');
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8081"
+  origin: "*"
 };
 
 app.use(cors(corsOptions));
@@ -63,13 +63,13 @@ app.use(expressEjsLayout);
 //routers
 require("./routes/Page.js")(app);
 require("./routes/users.js")(app);
-require("./routes/uploadMenu.js")(app);
+require("./routes/dashboard.js")(app);
 
 
 
 // set port, listen for requests
 const PORT = process.env.PORT || 80;
-app.listen(PORT,() => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 

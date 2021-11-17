@@ -23,7 +23,7 @@ module.exports = app => {
         })
 
     //dashboard page
-    router.post('/avatar', ensureAuthenticated, upload.single('avatar'), async (req, res) => {
+    router.post('/menu', ensureAuthenticated, upload.single('menu'), async (req, res) => {
         console.log("body: ", req.body);
         console.log(req.file);
         const { userId, restaurantName, restaurantPhone, restaurantLocation,
@@ -37,7 +37,7 @@ module.exports = app => {
             restaurantLocation: restaurantLocation,
             serviceHour: serviceHourJson,
             type: typeOfRestaurant,
-            avatar: req.file.buffer,
+            menu: req.file.buffer,
             dish: dishJson,
         });
         newRestaurant.save()
@@ -54,13 +54,13 @@ module.exports = app => {
             // 透過 id 到資料庫尋找相對應的用戶
             const restaurant = await Restaurant.findById(req.params.restaurantId)
             // 若無該用戶，或用戶無大頭貼，則丟出錯誤
-            if (!restaurant || !restaurant.avatar) {
+            if (!restaurant || !restaurant.menu) {
               throw new Error()
             }
             // 設定回傳 Header 的資料類型為 png 格式的圖片
             res.set('Content-Type', 'image/png')
             // 回傳大頭貼
-            res.send(restaurant.avatar)
+            res.send(restaurant.menu)
           } catch (error) {
             res.status(404).send()
           }

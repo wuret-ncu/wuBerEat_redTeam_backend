@@ -2,7 +2,7 @@
 <p> Welcome <%= user.userName %>
 </p>
 <%- include ('./partials/messages') %>
-<form action="/dashboard/avatar" method="POST" enctype="multipart/form-data">
+<form action="/dashboard/menu" method="POST" enctype="multipart/form-data">
     <div>
         <label for="userId">userId</label>
         <input type="name" name="userId" placeholder="Enter userId" value="<%= typeof userId != 'undefined' ? userId : '' %>" />
@@ -34,7 +34,7 @@
             value="<%= typeof typeOfRestaurant != 'undefined' ? typeOfRestaurant : '' %>" />
     </div>
     <div>
-        <input type="file"  name="avatar"/>
+        <input type="file"  name="menu"/>
     </div>
     <div>
         <label for="dish">dish</label>

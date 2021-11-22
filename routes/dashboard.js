@@ -61,9 +61,17 @@ module.exports = app => {
               throw new Error()
             }
             // 設定回傳 Header 的資料類型為 png 格式的圖片
-            res.set('Content-Type', 'image/png')
+            //res.set('Content-Type', 'image/png')
             // 回傳大頭貼
-            res.send(restaurant.menu)
+            res.send({
+                restaurantName: restaurant.restaurantName,
+                restaurantPhone: restaurant.restaurantPhone,
+                restaurantLocation: restaurant.restaurantLocation,
+                serviceHour: restaurant.serviceHour,
+                type: restaurant.type,
+                dish: restaurant.dish,
+                menu: restaurant.menu
+            })
           } catch (error) {
             res.status(404).send()
           }

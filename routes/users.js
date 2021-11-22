@@ -15,6 +15,7 @@ module.exports = app => {
     //Register handle
     router.post('/register', userProfiles.create)
     router.post('/login', (req, res, next) => {
+        //console.log(req.body);
         passport.authenticate('local', {
             successRedirect: '/dashboard',
             failureRedirect: '/users/login',

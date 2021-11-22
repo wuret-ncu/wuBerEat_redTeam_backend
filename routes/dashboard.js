@@ -2,7 +2,10 @@ const { ensureAuthenticated } = require('../config/auth')
 const multer = require('multer')
 const db = require("../models");
 const Restaurant = db.restaurant;
+
+
 module.exports = app => {
+    const controller = require("../controllers/controller.js");
     var router = require("express").Router();
 
     const upload = multer(
@@ -65,6 +68,8 @@ module.exports = app => {
             res.status(404).send()
           }
     })
+
+    router.post('/cart', controller.createCart)
 
     app.use('/dashboard', router);
 };

@@ -8,4 +8,5 @@ db.mongoose = mongoose;
 db.uri = dbConfig.uri;
 db.userProfiles = require("./userProfile.model.js")(mongoose);
 db.restaurant = require("./restaurant.model.js")(mongoose);
+db.cart = require("./cart.model.js")(mongoose)
 module.exports = db;

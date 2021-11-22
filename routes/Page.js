@@ -1,6 +1,6 @@
 const {ensureAuthenticated} = require('../config/auth') 
 module.exports = app => {
-    const userProfiles = require("../controllers/controller.js");
+    //const userProfiles = require("../controllers/controller.js");
   
     var router = require("express").Router();
 

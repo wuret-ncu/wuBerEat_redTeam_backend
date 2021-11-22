@@ -1,5 +1,6 @@
 const db = require("../models");
 const UserProfile = db.userProfiles;
+const Cart = db.cart;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 
@@ -36,7 +37,7 @@ exports.create = (req, res) => {
       console.log(user);
       if (user) {
         errors.push({ msg: 'email already registered' });
-        res.render('register',{errors,name,email,password,password2})
+        res.render('register', { errors, name, email, password, password2 })
       } else {
         const newUser = new UserProfile({
           userName: name,
@@ -68,7 +69,31 @@ exports.create = (req, res) => {
 };
 
 exports.createMenu = (req, res) => {
-  
+
+};
+
+exports.createCart = (req, res) => {
+  const { userId, restaurantName, dish } = req.body;
+  let errors = [];
+  if (!userId || !restaurantName || !dish) {
+    errors.push({ msg: "Please fill in all fields" })
+  }
+  if (errors.length > 0) {
+    res.send({ errors: errors });
+  }
+  const newCart = new Cart({
+    userId: userId,
+    restaurantName: restaurantName,
+    dish: dish
+  });
+  newCart.save()
+    .then((value) => {
+      console.log(value);
+      //req.flash('success_msg', 'You have now registered!');
+      //res.redirect('/users/login');
+      res.send({ok:"ok"});
+    })
+    .catch(value => console.log(value));
 };
 
 // Find a single Tutorial with an id

@@ -14,14 +14,11 @@ module.exports = app => {
     })
     //Register handle
     router.post('/register', userProfiles.create)
-    router.post('/login', (req, res, next) => {
-        //console.log(req.body);
-        passport.authenticate('local', {
-            successRedirect: '/dashboard',
-            failureRedirect: '/users/login',
-            failureFlash: true
-        })(req, res, next)
-    })
+    router.post('/login', passport.authenticate('local', { 
+        failureRedirect: '/users/login' }),
+        function (req, res) {
+            res.send({success:"login success"})
+        })
 
     //logout
     router.get('/logout', (req, res) => {

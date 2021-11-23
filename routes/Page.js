@@ -1,6 +1,6 @@
 const {ensureAuthenticated} = require('../config/auth') 
 module.exports = app => {
-    //const userProfiles = require("../controllers/controller.js");
+    const userProfiles = require("../controllers/controller.js");
   
     var router = require("express").Router();
 
@@ -12,7 +12,7 @@ module.exports = app => {
     //dashboard page
     router.get('/dashboard', ensureAuthenticated, (req,res)=>{
       console.log("req.user: ", req.user);
-      res.render('dashboard',{
+      res.send({
           user: req.user
       });
     })

@@ -26,31 +26,7 @@ module.exports = app => {
         })
 
     //dashboard page
-    router.post('/menu', ensureAuthenticated, upload.single('menu'), async (req, res) => {
-        console.log("body: ", req.body);
-        console.log(req.file);
-        const { userId, restaurantName, restaurantPhone, restaurantLocation,
-            serviceHour, typeOfRestaurant, dish } = req.body;
-        var serviceHourJson = JSON.parse(serviceHour);
-        var dishJson = JSON.parse(dish);
-        const newRestaurant = new Restaurant({
-            userId: req.user._id,
-            restaurantName: restaurantName,
-            restaurantPhone: restaurantPhone,
-            restaurantLocation: restaurantLocation,
-            serviceHour: serviceHourJson,
-            type: typeOfRestaurant,
-            menu: req.file.buffer,
-            dish: dishJson,
-        });
-        newRestaurant.save()
-            .then((value) => {
-                console.log(value)
-                req.flash('success_msg', 'You have send restaurant information!');
-                res.redirect('/dashboard');
-            })
-            .catch(value => console.log(value));
-    })
+    router.post('/createMenu', ensureAuthenticated, upload.single('menu'), controller.createMenu)
 
     router.get('/restaurant/:restaurantId', async (req, res) => {
         try {
@@ -58,7 +34,7 @@ module.exports = app => {
             const restaurant = await Restaurant.findById(req.params.restaurantId)
             // 若無該用戶，或用戶無大頭貼，則丟出錯誤
             if (!restaurant || !restaurant.menu) {
-              throw new Error()
+                throw new Error()
             }
             // 設定回傳 Header 的資料類型為 png 格式的圖片
             //res.set('Content-Type', 'image/png')
@@ -72,9 +48,9 @@ module.exports = app => {
                 dish: restaurant.dish,
                 menu: restaurant.menu
             })
-          } catch (error) {
+        } catch (error) {
             res.status(404).send()
-          }
+        }
     })
 
     router.post('/cart', controller.createCart)

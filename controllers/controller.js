@@ -1,5 +1,6 @@
 const db = require("../models");
 const UserProfile = db.userProfiles;
+const Restaurant = db.restaurant;
 const Cart = db.cart;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
@@ -68,8 +69,28 @@ exports.create = (req, res) => {
   }
 };
 
-exports.createMenu = (req, res) => {
-
+exports.createMenu = async (req, res) => {
+  console.log("body: ", req.body);
+        console.log(req.file);
+        const { userId, restaurantName, restaurantPhone, restaurantLocation,
+            serviceHour, typeOfRestaurant, dish } = req.body;
+        const newRestaurant = new Restaurant({
+            userId: req.user._id,
+            restaurantName: restaurantName,
+            restaurantPhone: restaurantPhone,
+            restaurantLocation: restaurantLocation,
+            serviceHour: serviceHour,
+            type: typeOfRestaurant,
+            menu: req.file.buffer,
+            dish: dish,
+        });
+        newRestaurant.save()
+            .then((value) => {
+                console.log(value)
+                req.flash('success_msg', 'You have send restaurant information!');
+                res.redirect('/dashboard');
+            })
+            .catch(value => console.log(value));
 };
 
 exports.createCart = (req, res) => {

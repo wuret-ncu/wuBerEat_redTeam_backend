@@ -1,5 +1,9 @@
+const passport = require('passport');
+
 module.exports = {
     ensureAuthenticated : function(req,res,next) {
+        console.log(req.session.passport.user);
+        console.log(passport.user);
         if(req.isAuthenticated()) {
             return next();
         }

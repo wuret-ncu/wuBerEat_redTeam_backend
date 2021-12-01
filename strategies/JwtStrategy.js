@@ -13,6 +13,7 @@ passport.use(
   new JwtStrategy(opts, function (jwt_payload, done) {
     // Check against the DB only if necessary.
     // This can be avoided if you don't want to fetch user details in each request.
+    console.log("call jwt strategy");
     User.findOne({ _id: jwt_payload._id }, function (err, user) {
       if (err) {
         return done(err, false)

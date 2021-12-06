@@ -20,7 +20,8 @@ require("./authenticate")
 const userRouter = require("./routes/userRoutes")
 
 var corsOptions = {
-  origin: "*"
+  origin: true,
+  credentials:true,
 };
 
 app.use(cors(corsOptions));

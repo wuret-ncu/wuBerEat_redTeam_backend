@@ -75,7 +75,7 @@ exports.createMenu = async (req, res) => {
         const { userId, restaurantName, restaurantPhone, restaurantLocation,
             serviceHour, typeOfRestaurant, dish } = req.body;
         const newRestaurant = new Restaurant({
-            userId: req.user._id,
+            userId: userId,
             restaurantName: restaurantName,
             restaurantPhone: restaurantPhone,
             restaurantLocation: restaurantLocation,

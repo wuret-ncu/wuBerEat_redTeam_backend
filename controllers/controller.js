@@ -2,6 +2,7 @@ const db = require("../models");
 const UserProfile = db.userProfiles;
 const Restaurant = db.restaurant;
 const Cart = db.cart;
+const OrderRecord = db.orderRecord
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 
@@ -108,6 +109,29 @@ exports.createCart = (req, res) => {
     dish: dish
   });
   newCart.save()
+    .then((value) => {
+      console.log(value);
+      //req.flash('success_msg', 'You have now registered!');
+      //res.redirect('/users/login');
+      res.send({ok:"ok"});
+    })
+    .catch(value => console.log(value));
+};
+
+exports.createOrderRecord = (req, res) => {
+  const { userId, history} = req.body;
+  let errors = [];
+  if (!userId || !history) {
+    errors.push({ msg: "Please fill in all fields" })
+  }
+  if (errors.length > 0) {
+    res.send({ errors: errors });
+  }
+  const newOrderRecord = new OrderRecord({
+    userId: userId,
+    history: history,
+  });
+  newOrderRecord.save()
     .then((value) => {
       console.log(value);
       //req.flash('success_msg', 'You have now registered!');

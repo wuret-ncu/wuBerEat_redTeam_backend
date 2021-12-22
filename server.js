@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
-const expressEjsLayout = require('express-ejs-layouts')
-const session = require('express-session');
-const flash = require('connect-flash');
+//const expressEjsLayout = require('express-ejs-layouts')
+//const session = require('express-session');
+//const flash = require('connect-flash');
 const passport = require('passport');
-const bodyParser = require("body-parser")
+//const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const app = express();
 
@@ -73,8 +73,8 @@ app.use(passport.initialize());
 // })
 
 //EJS
-app.set('view engine', 'ejs');
-app.use(expressEjsLayout);
+//app.set('view engine', 'ejs');
+//app.use(expressEjsLayout);
 
 
 //routers

@@ -65,8 +65,8 @@ router.post("/login2", passport.authenticate("local"), (req, res, next) => {
 })
 
 router.post("/refreshToken", (req, res, next) => {
-    const { signedCookies = {} } = req;
-    const { refreshToken } = signedCookies;
+    const { signedCookies = {} } = req
+    const { refreshToken } = signedCookies
     console.log(signedCookies);
     if (refreshToken) {
         try {
@@ -123,7 +123,6 @@ router.get("/logout2", verifyUser, (req, res, next) => {
     console.log("call logout");
     const { signedCookies = {} } = req
     const { refreshToken } = signedCookies
-    console.log(signedCookies);
     User.findById(req.user._id).then(
         user => {
             const tokenIndex = user.refreshToken.findIndex(
@@ -140,6 +139,7 @@ router.get("/logout2", verifyUser, (req, res, next) => {
                     res.send(err)
                 } else {
                     res.clearCookie("refreshToken", COOKIE_OPTIONS)
+                    res.cookie("refreshToken", "noRefreshToken")
                     res.send({ success: true })
                 }
             })

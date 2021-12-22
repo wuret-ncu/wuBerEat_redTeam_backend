@@ -78,10 +78,7 @@ app.use(passport.initialize());
 
 
 //routers
-require("./routes/Page.js")(app);
-require("./routes/users.js")(app);
 require("./routes/dashboard.js")(app);
-
 app.use("/users", userRouter)
 
 // set port, listen for requests

@@ -116,11 +116,12 @@ exports.createCart = (req, res) => {
       console.log(value);
       //req.flash('success_msg', 'You have now registered!');
       //res.redirect('/users/login');
-      res.cookie("cart", {
-        restaurantName: restaurantName,
-        userId: userId,
-        dish: dish
-      });
+      // res.cookie("cart", {
+      //   restaurantName: restaurantName,
+      //   userId: userId,
+      //   dish: dish
+      // });
+      // console.log(req.cookies);
       res.send({ok:"ok"});
     })
     .catch(value => console.log(value));
@@ -149,7 +150,6 @@ exports.createOrderRecord = (req, res) => {
     .catch(value => console.log(value));
 };
 
-// Find a single Tutorial with an id
 exports.findRestaurants = (req, res) => {
   Restaurant.find()
     .then((data) => {
@@ -165,8 +165,21 @@ exports.findRestaurants = (req, res) => {
         restaurant: err.restaurant || "Some error occurred while retrieving restaurants.",
     });
     })
+};
 
-
+exports.findCarts = (req, res) => {
+  const userId = req.body.userId;
+  Cart.find({userId:userId})
+    .then((data) => {
+      res.cookie("cart", data);
+      console.log(req.cookies)
+      res.send();
+    })
+    .catch((err) => {
+      res.status(500).send({
+        carts: err.cart || "Some error occurred while retrieving carts.",
+    });
+    })
 };
 
 // Update a Tutorial by the id in the request

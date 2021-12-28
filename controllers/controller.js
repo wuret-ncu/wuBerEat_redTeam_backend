@@ -74,7 +74,8 @@ exports.createMenu = async (req, res) => {
   console.log("body: ", req.body);
         console.log(req.file);
         const { userId, restaurantName, restaurantPhone, restaurantLocation,
-            serviceHour, typeOfRestaurant, dish } = req.body;
+            serviceHour, typeOfRestaurant, dish} = req.body;
+        const fileName = req.file.filename;      
         const newRestaurant = new Restaurant({
             userId: userId,
             restaurantName: restaurantName,
@@ -82,14 +83,18 @@ exports.createMenu = async (req, res) => {
             restaurantLocation: restaurantLocation,
             serviceHour: serviceHour,
             type: typeOfRestaurant,
-            menu: req.file.buffer,
+            menu: fileName,
             dish: dish,
         });
         newRestaurant.save()
             .then((value) => {
                 console.log(value)
+                res.send({success:"success"})
             })
-            .catch(value => console.log(value));
+            .catch(value => {
+              console.log(value)
+              res.send({error:value})
+            });
 };
 
 exports.createCart = (req, res) => {
@@ -111,6 +116,11 @@ exports.createCart = (req, res) => {
       console.log(value);
       //req.flash('success_msg', 'You have now registered!');
       //res.redirect('/users/login');
+      res.cookie("cart", {
+        restaurantName: restaurantName,
+        userId: userId,
+        dish: dish
+      });
       res.send({ok:"ok"});
     })
     .catch(value => console.log(value));

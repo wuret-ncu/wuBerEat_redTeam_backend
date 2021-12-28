@@ -31,7 +31,7 @@ module.exports = mongoose => {
             required: true
           },
           menu: {
-            type: Buffer,
+            type: String,
             required: true
           },
           dish: {

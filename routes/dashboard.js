@@ -1,15 +1,28 @@
 const { ensureAuthenticated } = require('../config/auth')
 const multer = require('multer')
+const path = require('path');
+const fs = require('fs');
 const db = require("../models");
+const { nanoid } = require("nanoid");
 const Restaurant = db.restaurant;
 
 
 module.exports = app => {
     const controller = require("../controllers/controller.js");
     var router = require("express").Router();
-
+    
+    var storage = multer.diskStorage({
+        //設定上傳後文件路徑，public資料夾會自動建立。
+           destination: function (req, file, cb) {
+               cb(null, './public')
+          },
+          filename: function (req, file, cb) {
+            cb(null, nanoid() + '.png') //Appending .png
+          }
+    });
     const upload = multer(
         {
+            storage:storage,
             limit: {
                 // 限制上傳檔案的大小為 20MB
                 fileSize: 20000000
@@ -66,6 +79,7 @@ module.exports = app => {
             res.status(404).send()
         }
     })
+    
 
     router.post('/cart', controller.createCart)
     router.post('/orderRecord', controller.createOrderRecord)

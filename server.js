@@ -7,6 +7,10 @@ const passport = require('passport');
 //const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const app = express();
+//const uploader = require('express-fileupload');
+
+//app.use(uploader());
+
 
 if (process.env.NODE_ENV !== "production") {
   // Load environment variables from .env file in non prod environments
@@ -76,6 +80,8 @@ app.use(passport.initialize());
 //app.set('view engine', 'ejs');
 //app.use(expressEjsLayout);
 
+//利用express託管靜態檔案
+app.use(express.static(__dirname + '/public'));
 
 //routers
 require("./routes/dashboard.js")(app);

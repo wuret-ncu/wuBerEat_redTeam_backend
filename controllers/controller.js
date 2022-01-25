@@ -188,10 +188,6 @@ exports.createOrderRecord = (req, res) => {
 exports.findRestaurants = (req, res) => {
   Restaurant.find()
     .then((data) => {
-      data.forEach((item) => {
-        item.avatar = undefined
-        item.menu = undefined
-      })
       console.log(data);
       res.send(data);
     })

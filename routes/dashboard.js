@@ -56,7 +56,7 @@ module.exports = app => {
                 serviceHour: restaurant.serviceHour,
                 type: restaurant.type,
                 dish: restaurant.dish,
-                menu: "dashboard/restaurant/images/" + restaurant._id
+                menu: restaurant.menu
             })
         } catch (error) {
             res.status(404).send()
@@ -74,7 +74,7 @@ module.exports = app => {
             // 設定回傳 Header 的資料類型為 png 格式的圖片
             res.set('Content-Type', 'image/png')
             // 回傳大頭貼
-            res.send(restaurant.menu)
+            res.send()
         } catch (error) {
             res.status(404).send()
         }

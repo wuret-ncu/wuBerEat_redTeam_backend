@@ -72,63 +72,98 @@ const passport = require('passport');
 
 exports.createMenu = async (req, res) => {
   console.log("body: ", req.body);
-        console.log(req.file);
-        const { userId, restaurantName, restaurantPhone, restaurantLocation,
-            serviceHour, typeOfRestaurant, dish} = req.body;
-        const fileName = req.file.filename;      
-        const newRestaurant = new Restaurant({
-            userId: userId,
-            restaurantName: restaurantName,
-            restaurantPhone: restaurantPhone,
-            restaurantLocation: restaurantLocation,
-            serviceHour: serviceHour,
-            type: typeOfRestaurant,
-            menu: fileName,
-            dish: dish,
-        });
-        newRestaurant.save()
-            .then((value) => {
-                console.log(value)
-                res.send({success:"success"})
-            })
-            .catch(value => {
-              console.log(value)
-              res.send({error:value})
-            });
+  console.log(req.file);
+  const { userId, restaurantName, restaurantPhone, restaurantLocation,
+    serviceHour, typeOfRestaurant, dish } = req.body;
+  const fileName = req.file.filename;
+  const newRestaurant = new Restaurant({
+    userId: userId,
+    restaurantName: restaurantName,
+    restaurantPhone: restaurantPhone,
+    restaurantLocation: restaurantLocation,
+    serviceHour: serviceHour,
+    type: typeOfRestaurant,
+    menu: fileName,
+    dish: dish,
+  });
+  newRestaurant.save()
+    .then((value) => {
+      console.log(value)
+      res.send({ success: "success" })
+    })
+    .catch(value => {
+      console.log(value)
+      res.send({ error: value })
+    });
 };
 
 exports.createCart = (req, res) => {
-  const { userId, restaurantName, dish } = req.body;
+  const { userId, history } = req.body;
+  console.log(userId);
   let errors = [];
-  if (!userId || !restaurantName || !dish) {
-    errors.push({ msg: "Please fill in all fields" })
+  if (!userId || !history) {
+    errors.push({ msg: "Some field missing" })
   }
   if (errors.length > 0) {
     res.send({ errors: errors });
   }
-  const newCart = new Cart({
-    userId: userId,
-    restaurantName: restaurantName,
-    dish: dish
-  });
-  newCart.save()
-    .then((value) => {
-      console.log(value);
-      //req.flash('success_msg', 'You have now registered!');
-      //res.redirect('/users/login');
-      // res.cookie("cart", {
-      //   restaurantName: restaurantName,
-      //   userId: userId,
-      //   dish: dish
-      // });
-      // console.log(req.cookies);
-      res.send({ok:"ok"});
+  Cart.find({ userId: userId })
+    .then((cartInfo) => {
+      if (cartInfo.length == 0) {
+        const newCart = new Cart({
+          userId: userId,
+          history: history,
+        });
+        newCart.save()
+          .then((value) => {
+            console.log(value);
+            res.cookie('cart', JSON.stringify({ userId: userId, history: history }))
+            console.log(req.cookies);
+            res.send({ success: "save cart successfully" });
+          })
+          .catch(value => res.send({ value }));
+      }
+      else {
+        console.log("in");
+        cartInfo[0].history = history;
+        cartInfo[0].save().then((value) => {
+          console.log(value);
+          res.cookie('cart', JSON.stringify({ userId: userId, history: history }))
+          console.log(req.cookies);
+          res.send({ success: "modify cart successfully" });
+        })
+          .catch(value => res.send({ value }));
+      }
+      //res.cookie("cart", data);
     })
-    .catch(value => console.log(value));
+    .catch((err) => {
+      res.status(500).send({
+        carts: "err find carts"
+      });
+    })
+
+  // const newCart = new Cart({
+  //   userId: userId,
+  //   history: history,
+  // });
+  // newCart.save()
+  //   .then((value) => {
+  //     console.log(value);
+  //req.flash('success_msg', 'You have now registered!');
+  //res.redirect('/users/login');
+  // res.cookie("cart", {
+  //   restaurantName: restaurantName,
+  //   userId: userId,
+  //   dish: dish
+  // });
+  // console.log(req.cookies);
+  //   res.send({ success: "save cart successfully" });
+  // })
+  // .catch(value => console.log(value));
 };
 
 exports.createOrderRecord = (req, res) => {
-  const { userId, history} = req.body;
+  const { userId, history } = req.body;
   let errors = [];
   if (!userId || !history) {
     errors.push({ msg: "Please fill in all fields" })
@@ -145,7 +180,7 @@ exports.createOrderRecord = (req, res) => {
       console.log(value);
       //req.flash('success_msg', 'You have now registered!');
       //res.redirect('/users/login');
-      res.send({ok:"ok"});
+      res.send({ ok: "ok" });
     })
     .catch(value => console.log(value));
 };
@@ -163,13 +198,13 @@ exports.findRestaurants = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         restaurant: err.restaurant || "Some error occurred while retrieving restaurants.",
-    });
+      });
     })
 };
 
 exports.findCarts = (req, res) => {
   const userId = req.body.userId;
-  Cart.find({userId:userId})
+  Cart.find({ userId: userId })
     .then((data) => {
       res.cookie("cart", data);
       console.log(req.cookies)
@@ -178,7 +213,7 @@ exports.findCarts = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         carts: err.cart || "Some error occurred while retrieving carts.",
-    });
+      });
     })
 };
 

@@ -75,7 +75,13 @@ exports.createMenu = async (req, res) => {
   console.log(req.file);
   const { userId, restaurantName, restaurantPhone, restaurantLocation,
     serviceHour, typeOfRestaurant, dish } = req.body;
-  var parsedServiceHour = JSON.parse(serviceHour);
+  var parsedServiceHour = [];
+  
+  serviceHour.forEach(element => {
+    var parsed = JSON.parse(element);
+    parsedServiceHour.push(parsed);
+  });
+  
   var parsedDish = JSON.parse(dish);
   const fileName = req.file.filename;
   const newRestaurant = new Restaurant({

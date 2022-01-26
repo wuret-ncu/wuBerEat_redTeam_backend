@@ -211,8 +211,7 @@ exports.findRestaurants = (req, res) => {
 };
 
 exports.findCarts = (req, res) => {
-  const userId = req.body.userId;
-  Cart.find({ userId: userId })
+  Cart.find({ userId: req.params.userId })
     .then((data) => {
       res.cookie("cart", data);
       console.log(req.cookies)
@@ -221,6 +220,18 @@ exports.findCarts = (req, res) => {
     .catch((err) => {
       res.status(500).send({
         carts: err.cart || "Some error occurred while retrieving carts.",
+      });
+    })
+};
+
+exports.findOrderRecords = (req, res) => {
+  OrderRecord.find({ userId: req.params.userId })
+    .then((data) => {
+      res.send(data[0]);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        orderRecords: err.cart || "Some error occurred while retrieving order records.",
       });
     })
 };

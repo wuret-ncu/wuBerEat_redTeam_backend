@@ -83,8 +83,9 @@ module.exports = app => {
 
     router.post('/carts', controller.createCart)
     router.post('/orderRecord', controller.createOrderRecord)
+    router.get('/orderRecord/:userId', controller.findOrderRecords)
     router.get('/restaurants', controller.findRestaurants)
-    router.get('/carts', controller.findCarts)
+    router.get('/carts/:userId', controller.findCarts)
     //router.put('/updateCart', controller.updateCart)
     app.use('/dashboard', router);
 };

@@ -74,12 +74,16 @@ exports.createMenu = async (req, res) => {
   console.log("body: ", req.body);
   console.log(req.file);
   const { userId, restaurantName, restaurantPhone, restaurantLocation,
-    serviceHour, typeOfRestaurant, dish } = req.body;
+    serviceHour, type, dish } = req.body;
   var parsedServiceHour = [];
-  
+  var parsedDish = [];
   serviceHour.forEach(element => {
     var parsed = JSON.parse(element);
     parsedServiceHour.push(parsed);
+  });
+  dish.forEach(element => {
+    var parsed = JSON.parse(element);
+    parsedDish.push(parsed);
   });
   
   var parsedDish = JSON.parse(dish);
@@ -90,7 +94,7 @@ exports.createMenu = async (req, res) => {
     restaurantPhone: restaurantPhone,
     restaurantLocation: restaurantLocation,
     serviceHour: parsedServiceHour,
-    type: typeOfRestaurant,
+    type: type,
     menu: fileName,
     dish: parsedDish,
   });

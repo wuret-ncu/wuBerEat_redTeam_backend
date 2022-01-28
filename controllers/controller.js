@@ -85,7 +85,7 @@ exports.createMenu = async (req, res) => {
     var parsed = JSON.parse(element);
     parsedDish.push(parsed);
   });
-  
+
   var parsedDish = JSON.parse(dish);
   const fileName = req.file.filename;
   const newRestaurant = new Restaurant({
@@ -235,6 +235,24 @@ exports.findOrderRecords = (req, res) => {
       });
     })
 };
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
+
+exports.search = (req, res) => {
+  if (req.body.search) {
+    const regex = new RegExp(escapeRegex(req.body.search), 'gi');
+    Restaurant.find({ restaurantName: regex }, function(err, foundRestaurants) {
+        if(err) {
+            console.log(err);
+        } else {
+           res.send(foundRestaurants);
+        }
+    }); 
+ }
+}
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {

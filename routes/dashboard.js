@@ -5,10 +5,10 @@ const fs = require('fs');
 const db = require("../models");
 const { nanoid } = require("nanoid");
 const Restaurant = db.restaurant;
-
+const controller = require("../controllers/controller.js");
 
 module.exports = app => {
-    const controller = require("../controllers/controller.js");
+    
     var router = require("express").Router();
     
     var storage = multer.diskStorage({
@@ -86,6 +86,8 @@ module.exports = app => {
     router.get('/orderRecord/:userId', controller.findOrderRecords)
     router.get('/restaurants', controller.findRestaurants)
     router.get('/carts/:userId', controller.findCarts)
+    router.get('/search', controller.search)
+    
     //router.put('/updateCart', controller.updateCart)
     app.use('/dashboard', router);
 };

@@ -80,15 +80,12 @@ module.exports = app => {
 
     router.put('/restaurant/:restaurantId', upload.single('menu'), async (req, res) => {
         try {
+            console.log(req.body)
             // 透過 id 到資料庫尋找相對應的餐廳
             const { restaurantName, restaurantPhone, restaurantLocation,
                 serviceHour, type, dish } = req.body;
-            const fileName = req.file.filename;
             const restaurant = await Restaurant.findById(req.params.restaurantId)
             // 若無該餐廳
-            if (!restaurant || !restaurant.menu) {
-                throw new Error()
-            }
             var parsedServiceHour = [];
             var parsedDish = [];
             serviceHour.forEach(element => {
@@ -103,7 +100,10 @@ module.exports = app => {
             restaurant.restaurantPhone = restaurantPhone
             restaurant.restaurantLocation = restaurantLocation
             restaurant.type = type
-            restaurant.menu = fileName
+            if (req.file) {
+                const fileName = req.file.filename;
+                restaurant.menu = fileName
+            }
             restaurant.serviceHour = parsedServiceHour
             restaurant.dish = parsedDish
 
@@ -119,7 +119,8 @@ module.exports = app => {
                 menu: restaurant.menu
             })
         } catch (error) {
-            res.status(404).send()
+            console.log(error)
+            res.status(404).send(error)
         }
     })
     router.post('/carts', controller.createCart)

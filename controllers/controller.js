@@ -5,6 +5,7 @@ const Cart = db.cart;
 const OrderRecord = db.orderRecord
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const Score = db.score;
 
 
 // Create and Save a new User
@@ -86,8 +87,9 @@ exports.createMenu = async (req, res) => {
     parsedDish.push(parsed);
   });
 
-  var parsedDish = JSON.parse(dish);
+  //var parsedDish = JSON.parse(dish);
   const fileName = req.file.filename;
+  console.log(fileName, restaurantName, restaurantPhone, restaurantLocation, type, parsedServiceHour, parsedDish)
   const newRestaurant = new Restaurant({
     userId: userId,
     restaurantName: restaurantName,
@@ -213,7 +215,7 @@ exports.findRestaurants = (req, res) => {
 exports.findCarts = (req, res) => {
   Cart.find({ userId: req.params.userId })
     .then((data) => {
-      res.cookie("cart", data);
+      res.cookie("cart", JSON.stringify(data[0]));
       console.log(req.cookies)
       res.send();
     })
@@ -242,18 +244,59 @@ function escapeRegex(text) {
 
 
 exports.search = (req, res) => {
-  if (req.body.search) {
-    const regex = new RegExp(escapeRegex(req.body.search), 'gi');
-    Restaurant.find({ restaurantName: regex }, function(err, foundRestaurants) {
-        if(err) {
-            console.log(err);
-        } else {
-           res.send(foundRestaurants);
-        }
-    }); 
- }
+  if (req.query.search) {
+    const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+    Restaurant.find({ restaurantName: regex }, function (err, foundRestaurants) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(foundRestaurants);
+      }
+    });
+  }
 }
 
+exports.createScore = (req, res) => {
+  const { restaurantId, userId, score } = req.body;
+  let errors = [];
+  if (!restaurantId || !userId || !score) {
+    errors.push({ msg: "Please fill in all fields" })
+  }
+  if (errors.length > 0) {
+    res.send({ errors: errors });
+  }
+  Score.find({ userId: userId })
+    .then((scoreInfo) => {
+      if (scoreInfo.length == 0) {
+        const newScore = new Score({
+          restaurantId: restaurantId,
+          userId: userId,
+          score: score,
+        });
+        newScore.save()
+          .then((value) => {
+            console.log(value);
+            res.send({ success: "create score successfully" });
+          })
+          .catch(value => res.send({ value }));
+      }
+      else {
+        console.log("in");
+        scoreInfo[0].score = score;
+        scoreInfo[0].save().then((value) => {
+          console.log(value);
+          res.send({ success: "modify score successfully" });
+        })
+          .catch(value => res.send({ value }));
+      }
+      //res.cookie("cart", data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        carts: "err find scores"
+      });
+    })
+};
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
 

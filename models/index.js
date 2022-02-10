@@ -11,4 +11,5 @@ db.restaurant = require("./restaurant.model.js")(mongoose);
 db.cart = require("./cart.model.js")(mongoose)
 db.orderRecord = require("./orderRecord.model.js")(mongoose)
 db.score = require("./score.model.js")(mongoose)
+db.message = require("./message.model.js")(mongoose)
 module.exports = db;

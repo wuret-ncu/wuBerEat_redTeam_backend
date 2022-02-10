@@ -6,6 +6,7 @@ const OrderRecord = db.orderRecord
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const Score = db.score;
+const Message = db.message;
 
 
 // Create and Save a new User
@@ -258,6 +259,7 @@ exports.search = (req, res) => {
 
 exports.createScore = (req, res) => {
   const { restaurantId, userId, score } = req.body;
+  console.log(req.body);
   let errors = [];
   if (!restaurantId || !userId || !score) {
     errors.push({ msg: "Please fill in all fields" })
@@ -265,7 +267,7 @@ exports.createScore = (req, res) => {
   if (errors.length > 0) {
     res.send({ errors: errors });
   }
-  Score.find({ userId: userId })
+  Score.find({ restaurantId: restaurantId })
     .then((scoreInfo) => {
       if (scoreInfo.length == 0) {
         const newScore = new Score({
@@ -282,18 +284,101 @@ exports.createScore = (req, res) => {
       }
       else {
         console.log("in");
-        scoreInfo[0].score = score;
-        scoreInfo[0].save().then((value) => {
-          console.log(value);
-          res.send({ success: "modify score successfully" });
-        })
-          .catch(value => res.send({ value }));
+        var exist = false;
+        scoreInfo.forEach(eachInfo => {
+          if (eachInfo.userId == userId) {
+            exist = true
+            eachInfo.score = score;
+            eachInfo.save().then((value) => {
+              console.log(value);
+              res.send({ success: "modify score successfully" });
+            })
+              .catch(value => res.send({ value }));
+          }
+        });
+        console.log("continue!")
+        if (exist == false) {
+          const newScore = new Score({
+            restaurantId: restaurantId,
+            userId: userId,
+            score: score,
+          });
+          newScore.save()
+            .then((value) => {
+              console.log(value);
+              res.send({ success: "create score successfully" });
+            })
+            .catch(value => res.send({ value }));
+        }
       }
       //res.cookie("cart", data);
     })
     .catch((err) => {
       res.status(500).send({
         carts: "err find scores"
+      });
+    })
+};
+
+exports.createMessage = (req, res) => {
+  const { restaurantId, userId, content } = req.body;
+  console.log(req.body);
+  let errors = [];
+  if (!restaurantId || !userId || !content) {
+    errors.push({ msg: "Please fill in all fields" })
+  }
+  if (errors.length > 0) {
+    res.send({ errors: errors });
+  }
+  Message.find({ restaurantId: restaurantId })
+    .then((messageInfo) => {
+      if (messageInfo.length == 0) {
+        const newMessage = new Message({
+          restaurantId: restaurantId,
+          userId: userId,
+          content: content,
+        });
+        newMessage.save()
+          .then((value) => {
+            console.log(value);
+            res.send({ success: "create message successfully" });
+          })
+          .catch(value => res.send({ value }));
+      }
+      else {
+        console.log("in");
+        var exist = false;
+        messageInfo.forEach(eachInfo => {
+          if (eachInfo.userId == userId) {
+            exist = true
+            eachInfo.content = content;
+            eachInfo.save().then((value) => {
+              console.log(value);
+              res.send({ success: "modify message successfully" });
+            })
+              .catch(value => res.send({ value }));
+          }
+        });
+        console.log("continue!")
+        if (exist == false) {
+          const newMessage = new Message({
+            restaurantId: restaurantId,
+            userId: userId,
+            content: content,
+          });
+          newMessage.save()
+            .then((value) => {
+              console.log(value);
+              res.send({ success: "create message successfully" });
+            })
+            .catch(value => res.send({ value }));
+        }
+      }
+      //res.cookie("cart", data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        carts: "err find messages"
       });
     })
 };

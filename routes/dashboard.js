@@ -130,6 +130,7 @@ module.exports = app => {
     router.get('/carts/:userId', controller.findCarts)
     router.get('/search', controller.search)
     router.post('/score', controller.createScore)
+    router.post('/message', controller.createMessage)
     //router.put('/updateCart', controller.updateCart)
     app.use('/dashboard', router);
 };

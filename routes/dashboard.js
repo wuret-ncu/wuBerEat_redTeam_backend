@@ -131,6 +131,9 @@ module.exports = app => {
     router.get('/search', controller.search)
     router.post('/score', controller.createScore)
     router.post('/message', controller.createMessage)
+    router.get('/score/:restaurantId', controller.getScore)
+    router.get('/message/:restaurantId', controller.getMessage)
+    
     //router.put('/updateCart', controller.updateCart)
     app.use('/dashboard', router);
 };

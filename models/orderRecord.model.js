@@ -28,7 +28,7 @@ module.exports = mongoose => {
             required: true
           },
           history:{
-            type: [History],
+            type: [[History]],
           },
         },
         { timestamps: true }

@@ -382,6 +382,32 @@ exports.createMessage = (req, res) => {
       });
     })
 };
+
+exports.getScore = (req, res) => {
+  console.log(req.params.restaurantId)
+  Score.find({ restaurantId: req.params.restaurantId })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        score: err.score || "Some error occurred while retrieving scores.",
+      });
+    })
+};
+
+exports.getMessage = (req, res) => {
+  console.log(req.params.restaurantId)
+  Message.find({ restaurantId: req.params.restaurantId })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving messages.",
+      });
+    })
+};
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {
 
